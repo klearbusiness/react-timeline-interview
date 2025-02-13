@@ -1,0 +1,96 @@
+{
+  "trade_timeline": {
+    "purchase_order": {
+      "order_id": "PO123456",
+      "order_date": "2025-02-10",
+      "buyer": {
+        "company_name": "Tesla",
+        "contact_name": "John Doe",
+        "contact_email": "johndoe@abccorp.com"
+      },
+      "seller": {
+        "company_name": "Klear Customer",
+        "contact_name": "Jane Smith",
+        "contact_email": "janesmith@xyzltd.com"
+      },
+      "order_details": {
+        "product": "Steel Sheets",
+        "quantity": 1000,
+        "unit_price": 500,
+        "total_price": 500000,
+        "delivery_date": "2025-04-10"
+      }
+    },
+    "events": [
+      {
+        "event_id": "FE001",
+        "event_type": "Financial Event",
+        "event_date": "2025-02-11",
+        "description": "Invoice",
+        "amount": 125000,
+        "currency": "USD",
+        "details": {
+          "payment_terms": "0",
+          "expiry_date": "2025-02-20"
+        }
+      },
+      {
+        "event_id": "FE002",
+        "event_type": "Financial Event",
+        "event_date": "2025-03-12",
+        "description": "Invoice",
+        "amount": 375000,
+        "currency": "USD",
+        "details": {
+          "payment_terms": "90",
+          "expiry_date": "2025-02-20"
+        }
+      },
+      {
+        "event_id": "OF001",
+        "event_type": "Offer",
+        "parent_event_id": "FE002",
+        "event_date": "2025-02-11",
+        "advance_rate": 0.9,
+        "expiry_date": "2025-02-20"
+      },
+      {
+        "event_id": "OF002",
+        "event_type": "Offer",
+        "parent_event_id": "FE002",
+        "event_date": "2025-02-11",
+        "advance_rate": 0.8,
+        "expiry_date": "2025-02-25"
+      },
+      {
+        "event_id": "OF003",
+        "event_type": "Offer",
+        "parent_event_id": "FE002",
+        "event_date": "2025-02-11",
+        "advance_rate": 0.7,
+        "expiry_date": "2025-02-25"
+      },
+      {
+        "event_id": "OE001",
+        "event_type": "Operational Event",
+        "event_date": "2025-02-12",
+        "status": "In Progress",
+        "details": "Order is being prepared for shipment."
+      },
+      {
+        "event_id": "OE002",
+        "event_type": "Operational Event",
+        "event_date": "2025-04-01",
+        "status": "Scheduled",
+        "details": "Shipment of 1000 Steel Sheets"
+      },
+      {
+        "event_id": "OE003",
+        "event_type": "Operational Event",
+        "event_date": "2025-04-08",
+        "status": "Completed",
+        "details": "Delivered 1000 Steel Sheets"
+      }
+    ]
+  }
+}
