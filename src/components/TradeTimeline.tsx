@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useOptimistic, useTransition } from 'react';
 import './TradeTimeline.css';
 
 // Define types based on your data structure
@@ -86,6 +86,47 @@ interface OfferFormState {
   expiry_date: string;
 }
 
+// Client-side implementation of form submission
+async function submitOfferAction(formData: FormData) {
+  // Extract values from the form data
+  const parentEventId = formData.get('parent_event_id') as string;
+  const eventId = formData.get('event_id') as string || null;
+  const advanceRate = parseFloat(formData.get('advance_rate') as string) / 100;
+  const eventDate = formData.get('event_date') as string;
+  const expiryDate = formData.get('expiry_date') as string;
+  
+  // Create the offer object
+  const offerData = {
+    advance_rate: advanceRate,
+    event_date: eventDate,
+    expiry_date: expiryDate,
+    parent_event_id: parentEventId,
+    event_type: "Offer" as const
+  };
+  
+  // In a real app, you would make an API call here
+  // For now, we'll simulate a delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // Return the result
+  return {
+    success: true,
+    data: {
+      ...offerData,
+      event_id: eventId || `OF${Date.now()}`
+    }
+  };
+}
+
+// Submit button component with loading state
+function SubmitButton({ isPending }: { isPending: boolean }) {
+  return (
+    <button type="submit" className="btn-primary" disabled={isPending}>
+      {isPending ? 'Submitting...' : 'Submit Offer'}
+    </button>
+  );
+}
+
 const TradeTimeline: React.FC<TradeTimelineProps> = ({ 
   purchase_order, 
   events,
@@ -102,6 +143,26 @@ const TradeTimeline: React.FC<TradeTimelineProps> = ({
     event_date: new Date().toISOString().split('T')[0], // Today's date
     expiry_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // 14 days from now
   });
+
+  // Use optimistic updates for a better user experience
+  const [optimisticEvents, addOptimisticEvent] = useOptimistic(
+    events,
+    (state, newEvent: TimelineEvent) => [...state, newEvent]
+  );
+  
+  // Use transition for pending UI state
+  const [isPending, startTransition] = useTransition();
+
+  // Listen for storage events (our simple way to trigger re-renders)
+  useEffect(() => {
+    const handleStorageEvent = () => {
+      // This will force a re-render
+      setShowOfferForm(false);
+    };
+    
+    window.addEventListener('storage', handleStorageEvent);
+    return () => window.removeEventListener('storage', handleStorageEvent);
+  }, []);
 
   // Reset form values
   const resetForm = () => {
@@ -148,30 +209,57 @@ const TradeTimeline: React.FC<TradeTimelineProps> = ({
     }));
   };
 
-  // Handle form submission
-  const handleFormSubmit = (e: React.FormEvent) => {
+  // Handle form submission with optimistic updates
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (editingOfferId && onEditOffer) {
-      // Update existing offer
-      onEditOffer(editingOfferId, offerForm);
-    } else if (onAddOffer) {
-      // Add new offer
-      onAddOffer(currentParentEventId, {
-        ...offerForm,
-        event_type: "Offer",
-        parent_event_id: currentParentEventId
-      });
+    // Create a FormData object from the form
+    const formData = new FormData(e.target as HTMLFormElement);
+    
+    // Add the parent event ID and editing offer ID if applicable
+    formData.append('parent_event_id', currentParentEventId);
+    if (editingOfferId) {
+      formData.append('event_id', editingOfferId);
     }
     
-    setShowOfferForm(false);
-    resetForm();
+    // Create an optimistic offer for immediate UI update
+    const optimisticOffer: OfferEvent = {
+      event_id: editingOfferId || `temp-${Date.now()}`,
+      event_type: "Offer",
+      parent_event_id: currentParentEventId,
+      advance_rate: offerForm.advance_rate,
+      event_date: offerForm.event_date,
+      expiry_date: offerForm.expiry_date
+    };
+    
+    // Add the optimistic event to the UI if it's a new offer
+    if (!editingOfferId) {
+      addOptimisticEvent(optimisticOffer);
+    }
+    
+    // Submit the form using the action with transition
+    startTransition(async () => {
+      const result = await submitOfferAction(formData);
+      
+      if (result.success) {
+        // Handle the successful submission
+        if (editingOfferId && onEditOffer) {
+          onEditOffer(editingOfferId, result.data);
+        } else if (onAddOffer) {
+          onAddOffer(result.data.parent_event_id, result.data);
+        }
+        
+        // Close the form
+        setShowOfferForm(false);
+        resetForm();
+      }
+    });
   };
 
   console.log('TradeTimeline received events:', events);
   
   // Sort events by date
-  const sortedEvents = [...events].sort((a, b) => 
+  const sortedEvents = [...optimisticEvents].sort((a, b) => 
     new Date(a.event_date).getTime() - new Date(b.event_date).getTime()
   );
   console.log('Events after sorting:', sortedEvents);
@@ -262,8 +350,17 @@ const TradeTimeline: React.FC<TradeTimelineProps> = ({
                 />
               </div>
               <div className="form-actions">
-                <button type="button" onClick={() => setShowOfferForm(false)}>Cancel</button>
-                <button type="submit">{editingOfferId ? 'Update Offer' : 'Add Offer'}</button>
+                <SubmitButton isPending={isPending} />
+                <button 
+                  type="button" 
+                  className="btn-secondary"
+                  onClick={() => {
+                    setShowOfferForm(false);
+                    resetForm();
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </form>
           </div>
