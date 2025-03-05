@@ -1,0 +1,346 @@
+.trade-timeline {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Purchase Order Card Styles */
+.purchase-order-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.purchase-order-card h3 {
+  margin-top: 0;
+  color: #2a3f5f;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 10px;
+}
+
+.order-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.order-parties {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  min-width: 300px;
+}
+
+.order-party {
+  flex: 1;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.order-party h4, .order-product h4 {
+  margin-top: 0;
+  color: #495057;
+}
+
+.order-product {
+  flex: 2;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  min-width: 300px;
+}
+
+/* Timeline Styles */
+.timeline-heading {
+  margin-top: 40px;
+  color: #2a3f5f;
+}
+
+.timeline {
+  position: relative;
+  margin-top: 30px;
+  padding-left: 30px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10px;
+  width: 2px;
+  background-color: #e9ecef;
+}
+
+.timeline-event {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -30px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #4e73df;
+  z-index: 2;
+}
+
+.financial-event .timeline-dot {
+  background-color: #1cc88a;
+}
+
+.offer .timeline-dot {
+  background-color: #f6c23e;
+}
+
+.operational-event .timeline-dot {
+  background-color: #4e73df;
+}
+
+.timeline-content {
+  padding-left: 15px;
+}
+
+.event-date {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 5px;
+}
+
+.event-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.event-header h4 {
+  margin: 0;
+  color: #343a40;
+}
+
+.event-id {
+  font-size: 0.8rem;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.financial-event-details .event-amount {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1cc88a;
+  margin: 10px 0;
+}
+
+.related-offers h5 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  color: #495057;
+  border-top: 1px solid #e9ecef;
+  padding-top: 15px;
+}
+
+.offers-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.offer-card {
+  background-color: #f8f9fa;
+  border-left: 3px solid #f6c23e;
+  padding: 10px;
+  border-radius: 4px;
+  min-width: 200px;
+}
+
+.offer-card p {
+  margin: 6px 0;
+}
+
+.offer-card p:nth-child(3) {
+  /* Styling for the purchase price */
+  font-weight: bold;
+  color: #1cc88a;
+  font-size: 0.95rem;
+}
+
+.operational-event-details .status {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.status-in-progress {
+  background-color: #f6c23e;
+  color: #856404;
+}
+
+.status-scheduled {
+  background-color: #36b9cc;
+  color: white;
+}
+
+.status-completed {
+  background-color: #1cc88a;
+  color: white;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #2a3f5f;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.form-actions button:first-child {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.form-actions button:last-child {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Offer Card Styles */
+.offers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.add-offer-btn {
+  background-color: var(--success-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.offer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.offer-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.edit-btn, .delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+  opacity: 1;
+}
+
+.no-offers {
+  font-style: italic;
+  color: #6c757d;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .order-details {
+    flex-direction: column;
+  }
+  
+  .order-parties {
+    flex-direction: column;
+  }
+
+  .offer-card {
+    min-width: 150px;
+  }
+} 
